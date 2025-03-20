@@ -19,7 +19,7 @@ def webhook():
     chat_id = data['payload']['from']
     waha.send_message(
         chat_id=chat_id,
-        message='Resposta Automática :)',
+        message='Esta é uma resposta automática gerada por um Webhook com Waha e API Python (Flask)',
     )
 
     return jsonify({'status': 'success'}), 200
