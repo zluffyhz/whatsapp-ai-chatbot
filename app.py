@@ -1,7 +1,5 @@
 #...
 
-import time
-import random
 from flask import Flask, request, jsonify
 
 from services.waha import Waha
