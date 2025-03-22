@@ -13,7 +13,7 @@ os.environ['HUGGINGFACE_API_KEY'] = config('HUGGINGFACE_API_KEY')
 
 
 if __name__ == '__main__':
-    file_path = '/app/rag/data/dna.pdf'
+    file_path = '/app/rag/data/marketing.pdf'
     loader = PyPDFLoader(file_path)
     docs = loader.load()
 
