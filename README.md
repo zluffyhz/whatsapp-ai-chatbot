@@ -83,6 +83,16 @@ O processo de conexão com o WhatsApp do Waha fornece uma session default, na da
 
 Após a conexão bem-sucedida, os usuários podem interagir com o bot enviando mensagens para o número do WhatsApp configurado. O bot processará as mensagens e responderá de acordo com sua programação e capacidades de IA.
 
+
+## Workflow n8n
+
+O arquivo `n8n_whatsapp_workflow.json` oferece um template pronto para importação no n8n. Ele registra o histórico recente das conversas, usa o ChatGPT para gerar respostas e agenda compromissos no Google Calendar.
+
+1. Acesse o n8n e escolha **Import**.
+2. Selecione o arquivo `n8n_whatsapp_workflow.json`.
+3. Defina as credenciais de WhatsApp, OpenAI e Google Calendar.
+4. Ative o workflow para começar a usar.
+
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para:

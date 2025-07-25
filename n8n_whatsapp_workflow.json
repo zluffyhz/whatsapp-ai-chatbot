@@ -11,17 +11,23 @@
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [0, 0]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
-        "functionCode": "const data = items[0].json;\nconst user = data.from;\nconst staticData = this.getWorkflowStaticData('global');\nstaticData[user] = staticData[user] || [];\nstaticData[user].push(data.body);\nitems[0].json.history = staticData[user].slice(-10);\nreturn items;"
+        "functionCode": "const data = items[0].json;\nconst user = data.from;\nconst staticData = this.getWorkflowStaticData('global');\nstaticData[user] = staticData[user] || [];\nstaticData[user].push({ role: 'user', content: data.body });\nitems[0].json.history = staticData[user].slice(-20);\nreturn items;"
       },
       "id": "Memory",
       "name": "Memory",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [250, 0]
+      "position": [
+        250,
+        0
+      ]
     },
     {
       "parameters": {
@@ -29,23 +35,30 @@
         "operation": "complete",
         "chatModel": "gpt-3.5-turbo",
         "prompt": {
-          "messages": [
-            {
-              "role": "system",
-              "content": "Você é um assistente no WhatsApp. Use informações anteriores para responder com simpatia e objetividade."
-            },
-            {
-              "role": "user",
-              "content": "={{ $json.body }}"
-            }
-          ]
+          "messages": "={{ [ { role: 'system', content: 'Você é um assistente no WhatsApp. Use informações anteriores para responder com simpatia e objetividade.' }, ...$json.history ] }}"
         }
       },
       "id": "OpenAI",
       "name": "OpenAI",
       "type": "n8n-nodes-base.openAi",
       "typeVersion": 1,
-      "position": [500, 0]
+      "position": [
+        500,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "const data = items[0].json; const user = data.from; const staticData = this.getWorkflowStaticData('global'); staticData[user] = staticData[user] || []; staticData[user].push({ role: 'assistant', content: data.data.choices[0].message.content }); return items;"
+      },
+      "id": "Store Response",
+      "name": "Store Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        650,
+        0
+      ]
     },
     {
       "parameters": {
@@ -62,7 +75,10 @@
       "name": "Check Agendamento",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [750, 0]
+      "position": [
+        750,
+        0
+      ]
     },
     {
       "parameters": {
@@ -74,7 +90,10 @@
       "name": "Google Calendar",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1,
-      "position": [1000, -100]
+      "position": [
+        1000,
+        -100
+      ]
     },
     {
       "parameters": {
@@ -88,7 +107,10 @@
       "name": "Send WhatsApp",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [1000, 100]
+      "position": [
+        1000,
+        100
+      ]
     }
   ],
   "connections": {
@@ -115,6 +137,17 @@
       ]
     },
     "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Store Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Response": {
       "main": [
         [
           {
